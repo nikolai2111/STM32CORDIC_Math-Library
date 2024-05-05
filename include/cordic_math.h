@@ -26,15 +26,18 @@
 #ifndef CORDIC_MATH_H_
 #define CORDIC_MATH_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Includes -----------------------------------------------------------------*/
 #include "main.h"
 
 /* Libraries */
 #include <math.h>
 
-#include "stm32g4xx_ll_cordic.h"
-
 /* Hardware */
+#include "stm32g4xx_ll_cordic.h"
 #include "cordic.h"
 
 /* Exported types -----------------------------------------------------------*/
@@ -56,6 +59,7 @@ extern float sinf_c(float x);
 #ifdef __cplusplus
 }
 #endif
+
 #endif /* CORDIC_MATH_H_ */
 
 /**
