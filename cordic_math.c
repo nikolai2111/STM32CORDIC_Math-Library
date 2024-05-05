@@ -55,7 +55,7 @@
 /* Private variables --------------------------------------------------------*/
 
 /* Private function prototypes ----------------------------------------------*/
-static void restrictAngle(float *x);
+static void restrictAngle(float *angle);
 
 /* External functions -------------------------------------------------------*/
 
@@ -76,7 +76,7 @@ static void restrictAngle(float *x);
  * @remark		Last Modifications:
  * 				- none
  *****************************************************************************/
-float c_sinf(float x)
+float sinf_c(float x)
 {
 	/* Configure the CORDIC */
 	LL_CORDIC_Config(CORDIC,

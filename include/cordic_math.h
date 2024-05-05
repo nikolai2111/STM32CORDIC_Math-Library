@@ -49,7 +49,7 @@
 /* Exported variables -------------------------------------------------------*/
 
 /* Exported functions prototypes --------------------------------------------*/
-extern float c_sinf(float x);
+extern float sinf_c(float x);
 
 /* Private defines ----------------------------------------------------------*/
 
