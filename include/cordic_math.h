@@ -43,6 +43,18 @@ extern "C" {
 /* Exported types -----------------------------------------------------------*/
 
 /* Exported constants -------------------------------------------------------*/
+enum Cordic_Func {
+	COS,
+	SIN,
+	PHASE,
+	MODULUS,
+	ATAN,
+	COSH,
+	SINH,
+	ATANH,
+	LN,
+	SQRT,
+};
 
 /* Exported macro -----------------------------------------------------------*/
 #define Q31_SCALAR 		( (float) M_PI )

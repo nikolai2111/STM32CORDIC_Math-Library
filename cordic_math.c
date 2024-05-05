@@ -53,6 +53,7 @@
 /* Private macro ------------------------------------------------------------*/
 
 /* Private variables --------------------------------------------------------*/
+static enum Cordic_Func prevFunc;
 
 /* Private function prototypes ----------------------------------------------*/
 static void restrictAngle(float *angle);
@@ -61,6 +62,11 @@ static void restrictAngle(float *angle);
 
 /* Private user code --------------------------------------------------------*/
 
+void cordic_init(enum Cordic_Func func)
+{
+
+}
+
 /**
  * @brief		Sine of x
  *
@@ -68,7 +74,7 @@ static void restrictAngle(float *angle);
  * @return 		float	Sine of x.
  *
  * @details		Computes the sine of the argument x. Angles are specified in
- * 				radians. Functions like the sinf() function form libm, but used
+ * 				radiant. Functions like the sinf() function form libm, but uses
  * 				the hardware of the CORDIC co-processor.
  *
  * @author		N. Zoller (NZ)
@@ -78,23 +84,30 @@ static void restrictAngle(float *angle);
  *****************************************************************************/
 float sinf_c(float x)
 {
-	/* Configure the CORDIC */
-	LL_CORDIC_Config(CORDIC,
-		LL_CORDIC_FUNCTION_SINE,		/* sine function */
-		LL_CORDIC_PRECISION_6CYCLES,	/* max precision for q1.31 sine */
-		LL_CORDIC_SCALE_0,				/* no scale */
-		LL_CORDIC_NBWRITE_1,			/* One input data: angle */
-		LL_CORDIC_NBREAD_1,				/* One output data: sine */
-		LL_CORDIC_INSIZE_32BITS,		/* q1.31 format for input data */
-		LL_CORDIC_OUTSIZE_32BITS);		/* q1.31 format for output data */
+	switch (prevFunc)
+	{
+	default:
+		/* Configure the CORDIC */
+		LL_CORDIC_Config(CORDIC,
+			LL_CORDIC_FUNCTION_SINE,		/* sine function */
+			LL_CORDIC_PRECISION_6CYCLES,	/* max precision for q1.31 sine */
+			LL_CORDIC_SCALE_0,				/* no scale */
+			LL_CORDIC_NBWRITE_1,			/* One input data: angle */
+			LL_CORDIC_NBREAD_1,				/* One output data: sine */
+			LL_CORDIC_INSIZE_32BITS,		/* q1.31 format for input data */
+			LL_CORDIC_OUTSIZE_32BITS);		/* q1.31 format for output data */
+//	case COS:
+	case SIN:
+		/* Limit the angle to the boundaries of the CORDIC */
+		restrictAngle(&x);
 
-	/* Limit the angle to the boundaries of the CORDIC */
-	restrictAngle(&x);
+		/* Convert to fix point and write angle */
+		LL_CORDIC_WriteData(CORDIC, F32_TO_Q31(x));
+	}
 
-	/* Write angle */
-	LL_CORDIC_WriteData(CORDIC, F32_TO_Q31(x));
+	prevFunc = SIN;
 
-	/* Read sine */
+	/* Read function value and convert back to float */
 	return Q31_TO_F32((int32_t) LL_CORDIC_ReadData(CORDIC));
 }
 
